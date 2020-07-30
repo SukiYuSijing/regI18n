@@ -19,17 +19,6 @@ var rightBacesMatchNoCatch ="(?:\}\})"
 var data = {}
 var wordNotExist =new Set()
 wordNotExist.clear()
-//匹配<>
-//var testReg = /((?:\<([a-zA-Z-]+[0-9]*)+)([\s\S]*?)(?:\>))+?/g
-//
-//     var a = testReg.exec(fileContent)
-//     while(a){
-//         console.log("a[0]",a[0])
-//         a = testReg.exec(fileContent)
-//     }
-//     return
-//匹配<><\>
-//var testReg = /((?:\<([a-zA-Z-]+[0-9]*)+)([\s\S]+?)(?:\>))/g
 
 function checkIfWordHaveTranslation(word){
     return !!data[word]
@@ -93,6 +82,14 @@ async function replaceFileContent(dirname){
                 resolve(data.toString());
         })
     })
+    var testReg = /((?:\<([a-zA-Z-]+[0-9]*)+)([\s\S]*?)(?:\>))+?/g
+
+    var a = testReg.exec(fileContent)
+    while(a){
+        console.log("a[0]",a[0])
+        a = testReg.exec(fileContent)
+    }
+    return
     //reg0是匹配html元素里的内容，例如<el-table-column label="名字">
     var reg0 = new RegExp(lessthanMatchNotCatch+'(('+number_punctuation_letter+chineseAndCrossbar+number_punctuation_letter+')+)'+greaterthanMatchNotCatch,"g")
     //获得匹配结果，也就是尖括号之间的内容，match0[1]
@@ -145,53 +142,64 @@ async function replaceFileContent(dirname){
 
     }
 
-    var reg0_2 = new RegExp("(?:\\<([a-zA-Z-]+[0-9]*)+)([\\s\\S]*?)(?:\\>)+?","gm")
-    //  /((?:\<([a-zA-Z-]+[0-9]*)+)([\s\S]*?)(?:\>))+?/g
-    var match0_2 = reg0_2.exec(fileContent)
-    while(match0_2){
-        console.log("match0_2[0]",match0_2[0])
-        fileContent= fileContent.replace(match0_2[0],(...args)=>{
-            console.log("args[0]",args[0])
-            var text= args[0].replace(new RegExp("(?:\\s*)([a-zA-Z-][0-9]*)+\\s*\\=\\s*"+"(?:[\"'])"+chieseNoQuation2+"(?:[\"']\\s*)","gm"),word=>{
+    var marchtemplate = new RegExp("(?:\\<template\\s*\\n*)"+"([\\s\\S]+?)"+"(?:\\>)","gm")
+    var marchtemplateResult = marchtemplate.exec(fileContent)
+    while (marchtemplateResult){
+        fileContent = fileContent.replace(marchtemplateResult[0],(...args)=>{
+            var templateContent = args[0]
+            var reg0_2 = new RegExp("(?:\\<[a-zA-Z-]+\\s*\\n*)"+"([\\s\\S]+?)"+"(?:\\>)","gm")
+            var match0_2 = reg0_2.exec(fileContent)
+            while(match0_2){
+                console.log("match0_2[1]",match0_2[1])
+                templateContent= templateContent.replace(match0_2[1],(...args)=>{
+                    // console.log(new RegExp("(?:\\s*)([a-zA-Z-][0-9]*)+\\s*\\=\\s*"+"(?:[\"'])"+chieseNoQuation2+"(?:[\"']\\s*)+？","gm"),
+                    //     "args[2]",args[])
+                    console.log(args[0])
+                    var text= args[0].replace(new RegExp("(?:\\s*)([a-zA-Z-][0-9]*)+\\s*\\=\\s*"+"(?:[\"'])"+chieseNoQuation2+"(?:[\"']\\s*)","gm"),word=>{
 
-                // let a = word.split(/\\s+/)
-                // console.log(a)
-                console.log("word",word)
-                let word1 =word.replace(new RegExp(chineseAndLetter),word=>{
-                    console.log("word3",word)
-                    if(checkIfWordHaveTranslation(word)) return "$t('"+data[word]+"')"
-                    else {
-                        console.log("word4",word)
-                        wordNotExist.add(word)
-                        return word
-                    }
-                    // return "$t('word')"
-                })
+                        // let a = word.split(/\\s+/)
+                        // console.log(a)
+                        console.log("word",word)
+                        let word1 =word.replace(new RegExp(chineseAndLetter),word=>{
+                            console.log("word3",word)
+                            if(checkIfWordHaveTranslation(word)) return "$t('"+data[word]+"')"
+                            else {
+                                console.log("word4",word)
+                                wordNotExist.add(word)
+                                return word
+                            }
+                            // return "$t('word')"
+                        })
 //"([0-9a-zA-Z-]*[\\u4E00-\\u9FA5]+[0-9a-zA-Z-]*)+"
-                if( a = !new RegExp(chineseAndLetter,"g").test(word1)){
-                    // console.log(word1,a)
-                    word1 = word1.replace(/(^\s*)/,'$1:')
-                    // console.log(word1)
-                }
-                console.log("word2",word1)
-                return word1
-            })
-            console.log(wordNotExist)
-            text = text.replace(new RegExp(quotationwithChinese,"gm"),(word,...string)=>{
-                let word1 =  word.replace(/^['"]|['"]$/g,"")
-                if(checkIfWordHaveTranslation(word1)) {
-                    return "$t('"+data[word1]+"')"
-                }
-                else {
-                    wordNotExist.add(word1)
-                    return word
-                }
-            })
-            return text
+                        if( a = !new RegExp(chineseAndLetter,"g").test(word1)){
+                            // console.log(word1,a)
+                            word1 = word1.replace(/(^\s*)/,'$1:')
+                            // console.log(word1)
+                        }
+                        console.log("word2",word1)
+                        return word1
+                    })
+                    console.log(wordNotExist)
+                    text = text.replace(new RegExp(quotationwithChinese,"gm"),(word,...string)=>{
+                        let word1 =  word.replace(/^['"]|['"]$/g,"")
+                        if(checkIfWordHaveTranslation(word1)) {
+                            return "$t('"+data[word1]+"')"
+                        }
+                        else {
+                            wordNotExist.add(word1)
+                            return word
+                        }
+                    })
+                    return text
 
+                })
+                match0_2 = reg0_2.exec(fileContent)
+            }
+            return templateContent
         })
-        match0_2 = reg0_2.exec(fileContent)
+        marchtemplateResult = marchtemplate.exec(fileContent)
     }
+
     // console.log(reg0_2)
 
     var reg0_1 = new RegExp("(?:([a-z-_A-Z][0-9]*)+\\s*(\\:|\\=\\=|\\=\\=\\=|\\=|)\\s*)"+"([\"']"+"("+number_punctuation_letter+chineseAndCrossbar+number_punctuation_letter+")+"+number_punctuation_letter+"[\"'])","gm")
