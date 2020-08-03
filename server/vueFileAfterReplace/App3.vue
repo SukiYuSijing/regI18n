@@ -22,8 +22,8 @@
                   style="width: 100%">
             <!--合并单元格-->
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE177')"
                     :name-of-final="$t('ABCDE165')"
                     :label="$t('ABCDE127')"
                     width="180"
@@ -31,8 +31,8 @@
                     prop="combineCell1">
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     :label="$t('ABCDE128')"
                     width="180"
@@ -40,8 +40,8 @@
                     prop="combineCell2">
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     :label="$t('ABCDE129')"
                     width="180"
@@ -50,8 +50,8 @@
             </el-table-column>
             <!---->
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     :label="$t('ABCDE130')"
                     width="180"
@@ -62,8 +62,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')"
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     prop="job"
                     v-if="show"
@@ -85,8 +85,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     prop="hobby"
                     v-if="show"
@@ -98,17 +98,17 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    color=黄色l,
-                    fanling=十八a
-                    name-of-final=姓李
+                    :color="$t('ABCDE176')",
+                    :fanling="$t('ABCDE177')"
+                    :name-of-final="$t('ABCDE165')"
                     :bel="$t('ABCDE132')" prop="address"  name = "address">
                 <!--<template slot-scope="scope">-->
                 <!--<el-input v-model="scope.row.address"></el-input>-->
                 <!--</template>-->
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE176')",
+                    :fanling="$t('ABCDE177')"
                     :name-of-final="$t('ABCDE165')"
                     prop="name"
                     :label="$t('ABCDE133')"
@@ -119,8 +119,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     :label="$t('ABCDE134')"
                     width="180"
@@ -130,8 +130,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     :label="$t('ABCDE135')"
                     name = "address2"
@@ -150,8 +150,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     prop="gender"
                     :label="$t('ABCDE136')"
@@ -162,8 +162,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    :color="$t('ABCDE163')",
-                    :fanling="$t('ABCDE164')"
+                    :color="$t('ABCDE178')",
+                    :fanling="$t('ABCDE179')"
                     :name-of-final="$t('ABCDE165')"
                     :label="$t('ABCDE137')"
                     name = "age"
@@ -208,7 +208,7 @@
 
         data() {
             return {
-                option1:['黄金糕','双皮奶','蚵仔煎','龙须面','北京烤鸭'],
+                option1:[this.$t('ABCDE166'),this.$t('ABCDE167'),this.$t('ABCDE168'),this.$t('ABCDE169'),this.$t('ABCDE170')],
                 options: [{
                     value: this.$t('ABCDE171'),
                     label: this.$t('ABCDE166')

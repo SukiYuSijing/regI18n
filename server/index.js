@@ -19,24 +19,11 @@ var rightBacesMatchNoCatch ="(?:\}\})"
 var data = {}
 var wordNotExist =new Set()
 wordNotExist.clear()
-//匹配<>
-//var testReg = /((?:\<([a-zA-Z-]+[0-9]*)+)([\s\S]*?)(?:\>))+?/g
-//
-//     var a = testReg.exec(fileContent)
-//     while(a){
-//         console.log("a[0]",a[0])
-//         a = testReg.exec(fileContent)
-//     }
-//     return
-//匹配<><\>
-//var testReg = /((?:\<([a-zA-Z-]+[0-9]*)+)([\s\S]+?)(?:\>))/g
-
 function checkIfWordHaveTranslation(word){
     return !!data[word]
 }
 
 async function fileDisplay(filePath,cb){
-    // console.log("cb",typeof cb)
     //根据文件路径读取文件，返回文件列表
     if(filePath.endsWith('vueFile'))
         fs.mkdir(filePath+"AfterReplace",()=>{
@@ -55,7 +42,6 @@ async function fileDisplay(filePath,cb){
             //遍历读取到的文件列表
             files.forEach(function(filename){
                 //获取当前文件的绝对路径
-                // console.log(filePath, filename)
                 var filedir = path.join(filePath, filename);
                 //根据文件路径获取文件信息，返回一个fs.Stats对象
                 fs.stat(filedir,async function(eror, stats){
@@ -65,14 +51,9 @@ async function fileDisplay(filePath,cb){
                         var isFile = stats.isFile();//是文件
                         var isDir = stats.isDirectory();//是文件夹
                         if(isFile){
-                            // console.log(filedir,stats);
-                            // 读取文件内容
-                            // console.log("filedir",filedir)
                             await cb(filedir)
-                            // console.log(content);
                         }
                         if(isDir){
-                            // console.log("filedir",filedir)
                             await fileDisplay(filedir,replaceFileContent);//递归，如果是文件夹，就继续遍历该文件夹下面的文件
                         }
                     }
@@ -83,7 +64,6 @@ async function fileDisplay(filePath,cb){
 }
 
 async function replaceFileContent(dirname){
-    // console.log(dirname)
     var fileContent = await new Promise((resolve, reject) => {
         // __dirname + '/App3.vue'
         fs.readFile(dirname, function (err, data) {
@@ -93,12 +73,10 @@ async function replaceFileContent(dirname){
                 resolve(data.toString());
         })
     })
-    //reg0是匹配html元素里的内容，例如<el-table-column label="名字">
     var reg0 = new RegExp(lessthanMatchNotCatch+'(('+number_punctuation_letter+chineseAndCrossbar+number_punctuation_letter+')+)'+greaterthanMatchNotCatch,"g")
     //获得匹配结果，也就是尖括号之间的内容，match0[1]
     var match0 = reg0.exec(fileContent)
     while(match0){
-
         fileContent= fileContent.replace(match0[1],(...args)=>{
             var content = args[0]
             //获得尖括号内{{}}的内容，例如label="{a==1?'确定':'删除'}"
@@ -128,9 +106,7 @@ async function replaceFileContent(dirname){
                 })
                 match0_0 = reg0_0.exec(content)
             }
-
             content=content.replace(new RegExp(chineseAndLetter,"gm"),(word)=>{
-
                 word = word.replace(/^['"]|['"]$/g,"")
                 if(checkIfWordHaveTranslation(word)) return "{{$t('"+data[word]+"')}}"
                 else {
@@ -140,65 +116,33 @@ async function replaceFileContent(dirname){
             })
             return content
         })
-
         match0 = reg0.exec(fileContent)
-
     }
-
     var reg0_2 = new RegExp("(?:\\<([a-zA-Z-]+[0-9]*)+)([\\s\\S]*?)(?:\\>)+?","gm")
-    //  /((?:\<([a-zA-Z-]+[0-9]*)+)([\s\S]*?)(?:\>))+?/g
     var match0_2 = reg0_2.exec(fileContent)
     while(match0_2){
-        console.log("match0_2[0]",match0_2[0])
         fileContent= fileContent.replace(match0_2[0],(...args)=>{
-            console.log("args[0]",args[0])
             var text= args[0].replace(new RegExp("(?:\\s*)([a-zA-Z-][0-9]*)+\\s*\\=\\s*"+"(?:[\"'])"+chieseNoQuation2+"(?:[\"']\\s*)","gm"),word=>{
-
-                // let a = word.split(/\\s+/)
-                // console.log(a)
-                console.log("word",word)
                 let word1 =word.replace(new RegExp(chineseAndLetter),word=>{
-                    console.log("word3",word)
                     if(checkIfWordHaveTranslation(word)) return "$t('"+data[word]+"')"
                     else {
-                        console.log("word4",word)
                         wordNotExist.add(word)
                         return word
                     }
-                    // return "$t('word')"
                 })
-//"([0-9a-zA-Z-]*[\\u4E00-\\u9FA5]+[0-9a-zA-Z-]*)+"
                 if( a = !new RegExp(chineseAndLetter,"g").test(word1)){
-                    // console.log(word1,a)
                     word1 = word1.replace(/(^\s*)/,'$1:')
-                    // console.log(word1)
                 }
-                console.log("word2",word1)
                 return word1
-            })
-            console.log(wordNotExist)
-            text = text.replace(new RegExp(quotationwithChinese,"gm"),(word,...string)=>{
-                let word1 =  word.replace(/^['"]|['"]$/g,"")
-                if(checkIfWordHaveTranslation(word1)) {
-                    return "$t('"+data[word1]+"')"
-                }
-                else {
-                    wordNotExist.add(word1)
-                    return word
-                }
             })
             return text
 
         })
         match0_2 = reg0_2.exec(fileContent)
     }
-    // console.log(reg0_2)
-
-    var reg0_1 = new RegExp("(?:([a-z-_A-Z][0-9]*)+\\s*(\\:|\\=\\=|\\=\\=\\=|\\=|)\\s*)"+"([\"']"+"("+number_punctuation_letter+chineseAndCrossbar+number_punctuation_letter+")+"+number_punctuation_letter+"[\"'])","gm")
+    var reg0_1 = /(?:([a-z_\-A-Z\[\]]+[0-9]*)+)\s*(\:|\=|\=\=|\=\=\=)\s*([\"']([0-9a-zA-Z-_\s+]*[\u4E00-\uF9A5]+[0-9a-zA-Z-_\s+]*)+?[\"'])/gm
     var match0_1 = reg0_1.exec(fileContent)
-
     while (match0_1){
-        // console.log("match0_1[0]",match0_1[0])
         fileContent= fileContent.replace(match0_1[0],(...args)=>{
             let text = args[0].replace(new RegExp(quotationwithChinese,"gm"),(word)=>{
                 let word1 =  word.replace(/^['"]|['"]$/g,"")
@@ -218,7 +162,6 @@ async function replaceFileContent(dirname){
     var reg0_3 = new RegExp("(?:(error|warning|succuess|message)\\s*\\(\\s*)(.*)(?:\\))","gm")
     var match0_3 = reg0_3.exec(fileContent)
     while (match0_3){
-        console.log("match0_3[2]",match0_3[2])
         fileContent= fileContent.replace(match0_3[2],(...args)=>{
             var text = args[0].replace(new RegExp(quotationwithChinese,"gm"),word=>{
                 let word1 =  word.replace(/^['"]|['"]$/g,"")
@@ -226,16 +169,12 @@ async function replaceFileContent(dirname){
                     return "this.$t('"+data[word1]+"')"
                 }
                 else {
-                    // console.log(word1)
                     wordNotExist.add(word1)
                     return word
                 }
-                //    "$t('datatttt')"
             })
-                console.log(text)
                 text=text.replace(new RegExp(backquotewithChinese,"gm"),arg=>{
                 var arg = arg.replace(new RegExp(chineseAndLetter,"g"),word=>{
-                    console.log(word)
                     let word1 =  word.replace(/^['"]|['"]$/g,"")
                     if(checkIfWordHaveTranslation(word1)) {
                         return"${$t('"+data[word1]+"')}"
@@ -251,9 +190,10 @@ async function replaceFileContent(dirname){
         })
         match0_3 = reg0_3.exec(fileContent)
     }
-
-    while (match0_1){
-        fileContent= fileContent.replace(match0_1[0],(...args)=>{
+    var reg0_4 =new RegExp(quotationwithChinese+"+?","gm")
+    var match0_4 = reg0_4.exec(fileContent)
+    while (match0_4){
+        fileContent= fileContent.replace(match0_4[0],(...args)=>{
             var text = args[0].replace(new RegExp(quotationwithChinese,"gm"),(word)=>{
                 let word1 =  word.replace(/^['"]|['"]$/g,"")
                 if(checkIfWordHaveTranslation(word1)) {
@@ -266,20 +206,13 @@ async function replaceFileContent(dirname){
             })
             return text
         })
-        match0_1 = reg0_1.exec(fileContent)
+        match0_4 = reg0_4.exec(fileContent)
     }
-    // console.log('wordNotExist',wordNotExist)
-
-    //dirname
-    // console.log("dirname",dirname)
     var newDir = dirname.replace("\\server\\vueFile\\","\\server\\vueFileAfterReplace\\")
-    console.log("newDirAfterReplace",newDir)
-
     fs.writeFile(newDir, fileContent,{  }, function(err, data) {
         if (err) {
             throw err;
         }
-        console.log("已创建"+newDir,wordNotExist)
         wordNotExist.forEach(wordkey=>{
             dataToWrite.push([wordkey,''])
         })
@@ -288,7 +221,6 @@ async function replaceFileContent(dirname){
             name:fileName,
             data:dataToWrite
         }]
-        // console.log(wordNotExist)
         fs.writeFileSync('./translationLost.xlsx',xlsx.build(xlsxObj),"binary");
 
     });
@@ -307,7 +239,6 @@ app.use(async function (ctx, next) {
             data[row[0]]=row[1]
         })
     })
-    // console.log("replaceFileContent",typeof replaceFileContent)
     fileDisplay(path.resolve(__dirname+'/vueFile'),replaceFileContent)
     //data是由excel转换过来的对应的对象
     wordNotExist.forEach(wordkey=>{

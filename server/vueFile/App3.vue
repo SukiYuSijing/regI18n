@@ -23,7 +23,7 @@
             <!--合并单元格-->
             <el-table-column
                     color="黄色",
-                    fanling="十八"
+                    fanling="十八a"
                     name-of-final="姓李"
                     label="合并单元格1"
                     width="180"
@@ -62,7 +62,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    color="黄色",
+                    color="黄色"
                     fanling="十八"
                     name-of-final="姓李"
                     prop="job"
@@ -98,17 +98,17 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    color=黄色l,
-                    fanling=十八a
-                    name-of-final=姓李
+                    color="黄色l",
+                    fanling="十八a"
+                    name-of-final="姓李"
                     bel="地址" prop="address"  name = "address">
                 <!--<template slot-scope="scope">-->
                 <!--<el-input v-model="scope.row.address"></el-input>-->
                 <!--</template>-->
             </el-table-column>
             <el-table-column
-                    color="黄色",
-                    fanling="十八"
+                    color="黄色l",
+                    fanling="十八a"
                     name-of-final="姓李"
                     prop="name"
                     label="姓名"
