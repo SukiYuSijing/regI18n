@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-13 09:43:34
- * @LastEditTime: 2021-03-14 22:09:44
+ * @LastEditTime: 2021-03-14 22:54:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \regI18n\server\reg.js
@@ -31,7 +31,7 @@ var leftBacesMatchNoCapture = '(?:{{)'; //左双大括号匹配不捕获
 var rightBacesMatchNoCapture = '(?:}})'; //右双大括号匹配不捕获
 let quotations = new RegExp('^[\'"]|[\'"]$', 'gm'); // 以单/双引号开头
 let withinQuotations = new RegExp('[\'"](.+?)[\'"]', 'gm'); //匹配引号中的任何内容
-let textArea = global.document && global.document.querySelector('#aaa');
+let textArea = globalThis.document && globalThis.document.querySelector('#aaa');
 var fileContent = textArea && textArea.innerHTML;
 fileContent && regExpExchange(fileContent, {}, {}, true);
 function regExpExchange(fileContent, data, wordNotExist, testing) {
@@ -252,7 +252,7 @@ function regExpExchange(fileContent, data, wordNotExist, testing) {
     );
     pharseIncludesChineseMatch = pharseIncludesChinese.exec(fileContent);
   }
-  // console.log(fileContent);
+  console.log(fileContent);
   return fileContent;
 }
 if (!fileContent) module.exports = regExpExchange;
